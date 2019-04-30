@@ -44,11 +44,12 @@ void print_statistics(unsigned char min, unsigned char max, unsigned char mean, 
  * This function will print out an arry of data to the terminal.
  *
  * @param data_array: Unsigned char pointer to an n-element data array.
+ * @param data_size: Unsigned integer which indicates the size of the array.
  *
  * @return No return value.
  */
 
-void print_array(unsigned char * data_array);
+void print_array(unsigned char * data_array, unsigned int data_size);
 
 
 /**

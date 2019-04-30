@@ -9,32 +9,133 @@
  *
  *****************************************************************************/
 /**
- * @file <Add File Name> 
- * @brief <Add Brief Description Here >
+ * @file stats.h
+ * @brief Header file which contains function declarations 
  *
- * <Add Extended Description Here>
+ * This header file contains the function declarations and descriptions 
+ * for the functions used in stats.c
  *
- * @author <Add FirsName LastName>
- * @date <Add date >
+ * @author David Ryan
+ * @date 26/04/2019 
  *
  */
 #ifndef __STATS_H__
 #define __STATS_H__
 
-/* Add Your Declarations and Function Comments here */ 
 
 /**
- * @brief <Add Brief Description of Function Here>
+ * @brief Prints out statistics on an array of data.
  *
- * <Add Extended Description Here>
+ * This function will print out statistical analysis done on an arry of data
  *
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
+ * @param min: The min value from an array of data.
+ * @param max: The max value from an array of data.
+ * @param mean: The mean value from an array of data.
+ * @param med: The median value from an array of data.
  *
- * @return <Add Return Informaiton here>
+ * @return No return value.
  */
+void print_statistics(unsigned char min, unsigned char max, unsigned char mean, unsigned char med);
+
+
+/**
+ * @brief Prints out an array of data.
+ *
+ * This function will print out an arry of data to the terminal.
+ *
+ * @param data_array: Unsigned char pointer to an n-element data array.
+ *
+ * @return No return value.
+ */
+
+void print_array(unsigned char * data_array);
+
+
+/**
+ * @brief Finds the median value of an array of data.
+ *
+ * This function takes an unsigned char pointer to an 
+ * n-element data array and an unsigned integer which
+ * inicates the size of the array. This function will
+ * first sort the array and then find the median of
+ * the data_array. 
+ *
+ * @param data_array: Unsigned char pointer to an n-element data array.
+ * @param data_size: Unsigned integer which indicates the size of the array.
+ *
+ * @return Unsigned char value which represents the median value of the data_array.
+ */
+
+unsigned char find_median(unsigned char * data_array, unsigned int data_size);
+
+
+/**
+ * @brief Finds the mean value of an array of data.
+ *
+ * This function takes an unsigned char pointer to an
+ * n-element data array and an unsigned integer which
+ * inicates the size of the array. This function will
+ * find the mean of the data_array.
+ *
+ * @param data_array: Unsigned char pointer to an n-element data array.
+ * @param data_size: Unsigned integer which indicates the size of the array.
+ *
+ * @return Unsigned char value which represents the mean value of the data_array.
+ */
+
+unsigned char find_mean(unsigned char * data_array, unsigned int data_size);
+
+
+/**
+ * @brief Finds the max value in an array of data.
+ *
+ * This function takes an unsigned char pointer to an
+ * n-element data array and an unsigned integer which
+ * inicates the size of the array. This function will
+ * find the max value in the data_array.
+ *
+ * @param data_array: Unsigned char pointer to an n-element data array.
+ * @param data_size: Unsigned integer which indicates the size of the array.
+ *
+ * @return Unsigned char value which represents the max value of the data_array.
+ */
+
+unsigned char find_maximum(unsigned char * data_array, unsigned int data_size);
+
+
+/**
+ * @brief Finds the min value in an array of data.
+ *
+ * This function takes an unsigned char pointer to an
+ * n-element data array and an unsigned integer which
+ * inicates the size of the array. This function will
+ * find the min value in the data_array.
+ *
+ * @param data_array: Unsigned char pointer to an n-element data array.
+ * @param data_size: Unsigned integer which indicates the size of the array.
+ *
+ * @return Unsigned char value which represents the min value in the data_array.
+ */
+
+unsigned char find_minimum(unsigned char * data_array, unsigned int data_size);
+
+
+/**
+ * @brief Sorts an array from largest to smallest.
+ *
+ * This function takes an unsigned char pointer to an
+ * n-element data array and an unsigned integer which
+ * inicates the size of the array. This function will
+ * sort the array so the zeroth element is the largest 
+ * value and the last element is the smallest value.
+ *
+ * @param data_array: Unsigned char pointer to an n-element data array.
+ * @param data_size: Unsigned integer which indicates the size of the array.
+ *
+ * @return No return value.
+ */
+
+void sort_array(unsigned char * data_array, unsigned int data_size);
 
 
 #endif /* __STATS_H__ */

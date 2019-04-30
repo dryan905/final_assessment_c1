@@ -9,13 +9,17 @@
  *
  *****************************************************************************/
 /**
- * @file <Add File Name> 
- * @brief <Add Brief Description Here >
+ * @file stats.c
+ * @brief A program that performs statistical analytics on a dataset.
  *
- * <Add Extended Description Here>
+ * This program contains functions that can analyze an array of unsigned char
+ * data items. These functions report the maximum, minimum, mean and median 
+ * of the dataset. Other funstions in this program are used to print the results 
+ * from the statistical analyics and to print the unsigned char array. Also there
+ * is a function used to sort the array.
  *
- * @author <David Ryan>
- * @date <26/04/2019 >
+ * @author David Ryan
+ * @date 26/04/2019
  *
  */
 
@@ -39,5 +43,35 @@ void main() {
   /* Statistics and Printing Functions Go Here */
 
 }
+
+void print_statistics(unsigned char min, unsigned char max, unsigned char mean, unsigned char med){
+
+}
+
+void print_array(unsigned char * data_array){
+
+}
+
+unsigned char find_median(unsigned char * data_array, unsigned int data_size){
+
+}
+
+unsigned char find_mean(unsigned char * data_array, unsigned int data_size){
+
+}
+
+unsigned char find_maximum(unsigned char * data_array, unsigned int data_size){
+
+}
+
+unsigned char find_minimum(unsigned char * data_array, unsigned int data_size){
+
+}
+
+void find_maximum(unsigned char * data_array, unsigned int data_size){
+
+}
+
+
 
 

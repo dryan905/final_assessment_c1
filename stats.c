@@ -68,7 +68,7 @@ void print_array(unsigned char * data_array, unsigned int data_size){
 
 	for (int i = 0; i < data_size; ++i)
 	{
-		printf("%d ", data_array[i]);
+		printf("Array[%d] = %d\n ", i, data_array[i]);
 	}
 	printf("\n");
 
@@ -128,7 +128,7 @@ unsigned char find_mean(unsigned char * data_array, unsigned int data_size){
 unsigned char find_median(unsigned char * data_array, unsigned int data_size){
 
 	sort_array(data_array, data_size);
-	int index = (data_size/2) - 1;
+	int index = (data_size/2);
 
 	return data_array[index];
 

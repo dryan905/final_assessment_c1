@@ -20,7 +20,7 @@
  * value at the head of the array and the lowest value at the end of the array.
  *
  * @author David Ryan
- * @date 26/04/2019
+ * @date 30/05/2019
  *
  */
 
@@ -28,51 +28,63 @@
 
 #include <stdio.h>
 #include "stats.h"
+#include "platform.h"
+
+//int print_switch = 0;
+
+#ifdef VERBOSE
+  	int print_switch = 1;
+ #else
+	int print_switch = 0;
+#endif
 
 /* Size of the Data Set */
 #define SIZE (40)
 
-void main() {
+// int main() {
 
-  unsigned char test[SIZE] = { 34, 201, 190, 154,   8, 194,   2,   6,
-                              114, 88,   45,  76, 123,  87,  25,  23,
-                              200, 122, 150, 90,   92,  87, 177, 244,
-                              201,   6,  12,  60,   8,   2,   5,  67,
-                                7,  87, 250, 230,  99,   3, 100,  90};
+//   unsigned char test[SIZE] = { 34, 201, 190, 154,   8, 194,   2,   6,
+//                               114, 88,   45,  76, 123,  87,  25,  23,
+//                               200, 122, 150, 90,   92,  87, 177, 244,
+//                               201,   6,  12,  60,   8,   2,   5,  67,
+//                                 7,  87, 250, 230,  99,   3, 100,  90};
 
   
-  // Find the min, max, mean and median of test dataset.
-  unsigned char min_value = find_minimum(test, SIZE);
-  unsigned char max_value = find_maximum(test, SIZE);
-  unsigned char mean_value = find_mean(test, SIZE);
-  unsigned char median_value = find_median(test, SIZE);
+//   // Find the min, max, mean and median of test dataset.
+//   unsigned char min_value = find_minimum(test, SIZE);
+//   unsigned char max_value = find_maximum(test, SIZE);
+//   unsigned char mean_value = find_mean(test, SIZE);
+//   unsigned char median_value = find_median(test, SIZE);
 
-  // Print the results of the analytics.
-  print_statistics(min_value, max_value, mean_value, median_value);
+//   // Print the results of the analytics.
+//   print_statistics(min_value, max_value, mean_value, median_value);
 
-  // Print the test dataset on the screen.
-  print_array(test, SIZE);
+//   // Print the test dataset on the screen.
+//   print_array(test, SIZE);
 
-}
+//   return 0;
+
+// }
 
 void print_statistics(unsigned char min, unsigned char max, unsigned char mean, unsigned char med){
 
-	printf("minimum value is: %d\n", min);
-	printf("maximum value is: %d\n", max);
-	printf("mean value is: %d\n", mean);
-	printf("median value is: %d\n", med);
+	PRINTF("minimum value is: %d\n", min);
+	PRINTF("maximum value is: %d\n", max);
+	PRINTF("mean value is: %d\n", mean);
+	PRINTF("median value is: %d\n", med);
 
 }
 
 void print_array(unsigned char * data_array, unsigned int data_size){
 
-	for (int i = 0; i < data_size; ++i)
+	if (print_switch)
 	{
-		printf("Array[%d] = %d\n ", i, data_array[i]);
+		for (int i = 0; i < data_size; ++i)
+		{
+			PRINTF("Array[%d] = %d\n ", i, data_array[i]);
+		}
+		PRINTF("\n");
 	}
-	printf("\n");
-
-
 }
 
 

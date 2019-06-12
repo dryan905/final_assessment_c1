@@ -22,6 +22,11 @@
  */
 #include "memory.h"
 
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 /***********************************************************
  Function Definitions
 ***********************************************************/
@@ -46,5 +51,100 @@ void set_all(char * ptr, char value, unsigned int size){
 
 void clear_all(char * ptr, unsigned int size){
   set_all(ptr, 0, size);
+}
+
+uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length){
+
+	uint8_t * temp = (uint8_t *)malloc(length);
+	uint8_t * base_addr_temp = temp;
+	uint8_t * base_addr_dst = dst;
+
+	for (uint8_t i = 0; i < length; ++i)
+	{
+		*temp = *(src + i);
+		temp++;
+	}
+
+	temp = base_addr_temp;
+
+	for (uint8_t i = 0; i < length; ++i)
+	{
+		*dst = *(temp + i);
+		dst++;
+	}
+
+	free(temp);
+	return base_addr_dst;
+
+}
+
+
+uint8_t * my_memcopy(uint8_t * src, uint8_t * dst, size_t length){
+
+	uint8_t * base_addr = dst;
+
+	for (uint8_t i = 0; i < length; ++i)
+	{
+		*dst = *(src + i);
+		dst++;
+	}
+	return base_addr;
+
+}
+
+
+uint8_t * my_memset(uint8_t * src, size_t length, uint8_t value){
+
+	
+	for (uint8_t i = 0; i < length; ++i)
+	{
+		*(src+i) = value;
+	}
+
+	return src;
+
+}
+
+
+uint8_t * my_memzero(uint8_t * src, size_t length){
+
+	uint8_t * addr = my_memset(src, length, 0);
+	return addr;
+}
+
+
+uint8_t * my_reverse(uint8_t * src, size_t length){
+
+    uint8_t start = 0; 
+    uint8_t end = length -2;
+    uint8_t temp;
+
+    while (start < end)
+    {
+        temp = *(src+start);
+        *(src+start) = *(src+end);
+        *(src+end) = temp;
+
+        start++;
+        end--;
+	}
+
+	return src;
+
+
+}
+
+int32_t * reserve_words(size_t length){
+
+	int32_t  *addr = (int32_t *) malloc(length);
+	return addr;
+
+}
+
+
+void free_words(uint32_t * src){
+
+	free(src);
+
 }
 

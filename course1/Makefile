@@ -52,28 +52,28 @@
 include sources.mk
 
 BASEFLAGS = -Wall -Werror -O0 -g -std=c99
-MSP432_INCLUDE = -I../include/msp432
-CMSIS_INCLUDE = -I../include/CMSIS
+MSP432_INCLUDE = -Iinclude/msp432
+CMSIS_INCLUDE = -Iinclude/CMSIS
 CPU = cortex-m4
 ARCH = armv7e-m
 SPECS = nosys.specs
-TARGET = c1m2
+TARGET = final
 
 ifeq ($(PLATFORM), HOST)
 	CC = gcc
-	CFLAGS = $(BASEFLAGS) -DHOST -I$(INCLUDES) 
+	CFLAGS = $(BASEFLAGS) -DHOST -DCOURSE1 -I$(INCLUDES) 
 	LDFLAGS = -Wl,-Map=$(TARGET).map
 	OBJS = $(SOURCES1:.c=.o)
 	OBJCMD = objdump
 else
  	CC = arm-none-eabi-gcc
  	LD = arm-none-eabi-ld
- 	LINKER_FILE = ../msp432p401r.lds
+ 	LINKER_FILE = msp432p401r.lds
  	OBJS = $(SOURCES2:.c=.o)
  	OBJCMD = arm-linux-gnueabi-objdump
 
  	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
- 	CFLAGS = $(BASEFLAGS) -DMSP432 -mcpu=$(CPU) -march=$(ARCH) --specs=$(SPECS) -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -I$(INCLUDES) $(MSP432_INCLUDE) $(CMSIS_INCLUDE)
+ 	CFLAGS = $(BASEFLAGS) -DMSP432 -DCOURSE1 -mcpu=$(CPU) -march=$(ARCH) --specs=$(SPECS) -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -I$(INCLUDES) $(MSP432_INCLUDE) $(CMSIS_INCLUDE)
 
 endif
 
@@ -81,88 +81,88 @@ endif
 
 %.o : %.c
 	$(CC) -c $< $(CFLAGS) -o $@
-	$(CC) -MM $(CFLAGS) $*.c > $*.d
+# 	$(CC) -MM $(CFLAGS) $*.c > $*.d
 
 #######################################################################
 
 #######################################################################
 
-main.i: main.c
-	$(CC) -E main.c $(CFLAGS) -o main.i
+# main.i: main.c
+# 	$(CC) -E main.c $(CFLAGS) -o main.i
 
-memory.i: memory.c
-	$(CC) -E memory.c $(CFLAGS) -o memory.i
+# memory.i: memory.c
+# 	$(CC) -E memory.c $(CFLAGS) -o memory.i
 
-interrupts_msp432p401r_gcc.i: interrupts_msp432p401r_gcc.c
-	$(CC) -E interrupts_msp432p401r_gcc.c $(CFLAGS) -o interrupts_msp432p401r_gcc.i
+# interrupts_msp432p401r_gcc.i: interrupts_msp432p401r_gcc.c
+# 	$(CC) -E interrupts_msp432p401r_gcc.c $(CFLAGS) -o interrupts_msp432p401r_gcc.i
 
-startup_msp432p401r_gcc.i: startup_msp432p401r_gcc.c
-	$(CC) -E startup_msp432p401r_gcc.c $(CFLAGS) -o startup_msp432p401r_gcc.i
+# startup_msp432p401r_gcc.i: startup_msp432p401r_gcc.c
+# 	$(CC) -E startup_msp432p401r_gcc.c $(CFLAGS) -o startup_msp432p401r_gcc.i
 
-system_msp432p401r.i: system_msp432p401r.c
-	$(CC) -E system_msp432p401r.c $(CFLAGS) -o system_msp432p401r.i
-
-#######################################################################
-
-#######################################################################
-
-main.asm: main.c
-	$(CC) -c $(CFLAGS) main.c -o main.o
-	$(OBJCMD) -Sx main.o > main.asm 
-
-memory.asm: memory.c
-	$(CC) -c $(CFLAGS) memory.c -o memory.o
-	$(OBJCMD) -Sx memory.o > memory.asm 
-
-interrupts_msp432p401r_gcc.asm: interrupts_msp432p401r_gcc.c
-	$(CC) -c  $(CFLAGS) interrupts_msp432p401r_gcc.c -o interrupts_msp432p401r_gcc.o
-	$(OBJCMD) -Sx interrupts_msp432p401r_gcc.o > interrupts_msp432p401r_gcc.asm 
-
-startup_msp432p401r_gcc.asm: startup_msp432p401r_gcc.c
-	$(CC) -c $(CFLAGS) startup_msp432p401r_gcc.c -o startup_msp432p401r_gcc.i
-	$(OBJCMD) -Sx startup_msp432p401r_gcc.o > startup_msp432p401r_gcc.asm 
-
-system_msp432p401r.asm: system_msp432p401r.c
-	$(CC) -c $(CFLAGS) system_msp432p401r.c -o system_msp432p401r.o
-	$(OBJCMD) -Sx system_msp432p401r.o > system_msp432p401r.asm 
-
-c1m2.asm: c1m2.out
-	$(OBJCMD) -Sx c1m2.out > c1m2.asm 
-
+# system_msp432p401r.i: system_msp432p401r.c
+# 	$(CC) -E system_msp432p401r.c $(CFLAGS) -o system_msp432p401r.i
 
 #######################################################################
 
 #######################################################################
 
-main.o: main.c
-	$(CC) -c main.c $(CFLAGS) -o main.o
+# main.asm: main.c
+# 	$(CC) -c $(CFLAGS) main.c -o main.o
+# 	$(OBJCMD) -Sx main.o > main.asm 
 
-memory.o: memory.c
-	$(CC) -c memory.c $(BASEFLAGS) -DHOST -I$(INCLUDES) -o memory.o
+# memory.asm: memory.c
+# 	$(CC) -c $(CFLAGS) memory.c -o memory.o
+# 	$(OBJCMD) -Sx memory.o > memory.asm 
 
-interrupts_msp432p401r_gcc.o: interrupts_msp432p401r_gcc.c
-	arm-none-eabi-gcc -c interrupts_msp432p401r_gcc.c \
-	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
-	-march=$(ARCH) --specs=$(SPECS) \
-	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
-	 $(CMSIS_INCLUDE) -o interrupts_msp432p401r_gcc.o
+# interrupts_msp432p401r_gcc.asm: interrupts_msp432p401r_gcc.c
+# 	$(CC) -c  $(CFLAGS) interrupts_msp432p401r_gcc.c -o interrupts_msp432p401r_gcc.o
+# 	$(OBJCMD) -Sx interrupts_msp432p401r_gcc.o > interrupts_msp432p401r_gcc.asm 
 
-startup_msp432p401r_gcc.o: startup_msp432p401r_gcc.c
-	arm-none-eabi-gcc -c startup_msp432p401r_gcc.c \
-	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
-	-march=$(ARCH) --specs=$(SPECS) \
-	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
-	 $(CMSIS_INCLUDE) -o startup_msp432p401r_gcc.o
+# startup_msp432p401r_gcc.asm: startup_msp432p401r_gcc.c
+# 	$(CC) -c $(CFLAGS) startup_msp432p401r_gcc.c -o startup_msp432p401r_gcc.i
+# 	$(OBJCMD) -Sx startup_msp432p401r_gcc.o > startup_msp432p401r_gcc.asm 
 
-system_msp432p401r.o: system_msp432p401r.c
-	arm-none-eabi-gcc -c system_msp432p401r.c \
-	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
-	-march=$(ARCH) --specs=$(SPECS) \
-	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
-	 $(CMSIS_INCLUDE) -o system_msp432p401r.o
+# system_msp432p401r.asm: system_msp432p401r.c
+# 	$(CC) -c $(CFLAGS) system_msp432p401r.c -o system_msp432p401r.o
+# 	$(OBJCMD) -Sx system_msp432p401r.o > system_msp432p401r.asm 
+
+# c1m2.asm: c1m2.out
+# 	$(OBJCMD) -Sx c1m2.out > c1m2.asm 
+
+
+#######################################################################
+
+#######################################################################
+
+# main.o: main.c
+# 	$(CC) -c main.c $(CFLAGS) -o main.o
+
+# memory.o: memory.c
+# 	$(CC) -c memory.c $(BASEFLAGS) -DHOST -I$(INCLUDES) -o memory.o
+
+# interrupts_msp432p401r_gcc.o: interrupts_msp432p401r_gcc.c
+# 	arm-none-eabi-gcc -c interrupts_msp432p401r_gcc.c \
+# 	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
+# 	-march=$(ARCH) --specs=$(SPECS) \
+# 	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
+# 	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
+# 	 $(CMSIS_INCLUDE) -o interrupts_msp432p401r_gcc.o
+
+# startup_msp432p401r_gcc.o: startup_msp432p401r_gcc.c
+# 	arm-none-eabi-gcc -c startup_msp432p401r_gcc.c \
+# 	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
+# 	-march=$(ARCH) --specs=$(SPECS) \
+# 	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
+# 	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
+# 	 $(CMSIS_INCLUDE) -o startup_msp432p401r_gcc.o
+
+# system_msp432p401r.o: system_msp432p401r.c
+# 	arm-none-eabi-gcc -c system_msp432p401r.c \
+# 	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
+# 	-march=$(ARCH) --specs=$(SPECS) \
+# 	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
+# 	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
+# 	 $(CMSIS_INCLUDE) -o system_msp432p401r.o
 
 #######################################################################
 

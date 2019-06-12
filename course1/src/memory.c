@@ -55,7 +55,7 @@ void clear_all(char * ptr, unsigned int size){
 
 uint8_t * my_memmove(uint8_t * src, uint8_t * dst, size_t length){
 
-	uint8_t * temp = (uint8_t *)malloc(length);
+	uint8_t * temp = (uint8_t *)malloc(sizeof(uint8_t)*length);
 	uint8_t * base_addr_temp = temp;
 	uint8_t * base_addr_dst = dst;
 
@@ -116,7 +116,7 @@ uint8_t * my_memzero(uint8_t * src, size_t length){
 uint8_t * my_reverse(uint8_t * src, size_t length){
 
     uint8_t start = 0; 
-    uint8_t end = length -2;
+    uint8_t end = length -1;
     uint8_t temp;
 
     while (start < end)
@@ -136,7 +136,7 @@ uint8_t * my_reverse(uint8_t * src, size_t length){
 
 int32_t * reserve_words(size_t length){
 
-	int32_t  *addr = (int32_t *) malloc(length);
+	int32_t  *addr = (int32_t *) malloc(sizeof(uint32_t)*length);
 	return addr;
 
 }

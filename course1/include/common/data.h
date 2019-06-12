@@ -24,7 +24,34 @@
 
 #include <stdint.h>
 
+/**
+ * @brief Converts an integer to an ASCII string
+ *
+ * This function takes a signed 32-bit integer, a pointer
+ * to a memory location to store the ASCII string and base
+ * value used to convert the data.
+ *
+ * @param data: The value to be converted to an ASCII string
+ * @param ptr: pointer to memory location to store the result
+ * @param base: The base you want to convert the data to
+ *
+ * @return Length of the converted data
+ */
 uint8_t my_itoa(int32_t data, uint8_t * ptr, uint32_t base);
+
+/**
+ * @brief Converts an ASCII string to a integer
+ *
+ *  This function takes a pointer to a memory location which holds
+ *  the ASCII string. digits is the legth of the string and base
+ *  base is what number representation you want to convert to.
+ *
+ * @param ptr: memory location which holds the ASCII string
+ * @param digits: length of the ASCII string
+ * @param base: The base you want to convert the data to
+ *
+ * @return converted 32-bit signed integer
+ */
 int32_t my_atoi(uint8_t * ptr, uint8_t digits, uint32_t base);
 
 

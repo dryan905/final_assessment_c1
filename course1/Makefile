@@ -16,25 +16,6 @@
 #
 # Build Targets:
 #
-#      	main.i - preprocessed output of main.c program
-#	   	memory.i - preprocessed output of memory.c program
-#		interrupts_msp432p401r_gcc.i - preprocessed output of interrupts_msp432p401r_gcc.c program
-#		startup_msp432p401r_gcc.i - preprocessed output of startup_msp432p401r_gcc.c program
-#		system_msp432p401r.i - preprocessed output of system_msp432p401r.c program
-#
-#      	main.asm - assembly output of main.c program
-#	   	memory.asm - assembly output of memory.c program
-#		interrupts_msp432p401r_gcc.asm - assembly output of interrupts_msp432p401r_gcc.c program
-#		startup_msp432p401r_gcc.asm - assembly output of startup_msp432p401r_gcc.c program
-#		system_msp432p401r.asm - assembly output of system_msp432p401r.c program
-#		c1m2.asm - assembly output of final output executable
-#
-#      	main.o - Generate the object file for main.c program (No linking done)
-#	   	memory.o - Generate the object file for memory.c program (No linking done)
-#		interrupts_msp432p401r_gcc.o - Generate the object file for interrupts_msp432p401r_gcc.c program (No linking done)
-#		startup_msp432p401r_gcc.o - Generate the object file for startup_msp432p401r_gcc.c program (No linking done)
-#		system_msp432p401r.o - Generate the object file for system_msp432p401r.c program (No linking done)
-
 #		compile-all - compiles all c files into object files. (No linking done)
 #		build - Compile all object files and link into a final executable
 #		all - Compile all object files and link into a final executable
@@ -47,6 +28,8 @@
 #		ARCH - ARM Architecture
 #		SPECS - Specs file to give the linker
 #		OBJCMD - Which version of objdump to run
+#		VERBOSE - used to debug program. prints out the data
+#		COURSE - used to run course1 function in main.c
 #
 #------------------------------------------------------------------------------
 include sources.mk
@@ -59,9 +42,23 @@ ARCH = armv7e-m
 SPECS = nosys.specs
 TARGET = final
 
+# If DEBUG=1 then set VERBOSE. This will print out the data array for each test in course1 using print_array. 
+ifeq ($(DEBUG),1)
+	VERBOSE = -DVERBOSE
+else
+	VERBOSE = 
+endif
+
+#If RUN=1 then set COURSE. This will run the course1 function in main.c
+ifeq ($(RUN),1)
+	COURSE = -DCOURSE1
+else
+	COURSE = 
+endif
+
 ifeq ($(PLATFORM), HOST)
 	CC = gcc
-	CFLAGS = $(BASEFLAGS) -DHOST -DCOURSE1 -I$(INCLUDES) 
+	CFLAGS = $(BASEFLAGS) -DHOST $(COURSE) $(VERBOSE) -I$(INCLUDES) 
 	LDFLAGS = -Wl,-Map=$(TARGET).map
 	OBJS = $(SOURCES1:.c=.o)
 	OBJCMD = objdump
@@ -73,7 +70,8 @@ else
  	OBJCMD = arm-linux-gnueabi-objdump
 
  	LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
- 	CFLAGS = $(BASEFLAGS) -DMSP432 -DCOURSE1 -mcpu=$(CPU) -march=$(ARCH) --specs=$(SPECS) -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -I$(INCLUDES) $(MSP432_INCLUDE) $(CMSIS_INCLUDE)
+ 	CFLAGS = $(BASEFLAGS) -DMSP432 $(COURSE) $(VERBOSE) -mcpu=$(CPU) -march=$(ARCH) --specs=$(SPECS) \
+ 			-mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -I$(INCLUDES) $(MSP432_INCLUDE) $(CMSIS_INCLUDE)
 
 endif
 
@@ -81,92 +79,7 @@ endif
 
 %.o : %.c
 	$(CC) -c $< $(CFLAGS) -o $@
-# 	$(CC) -MM $(CFLAGS) $*.c > $*.d
 
-#######################################################################
-
-#######################################################################
-
-# main.i: main.c
-# 	$(CC) -E main.c $(CFLAGS) -o main.i
-
-# memory.i: memory.c
-# 	$(CC) -E memory.c $(CFLAGS) -o memory.i
-
-# interrupts_msp432p401r_gcc.i: interrupts_msp432p401r_gcc.c
-# 	$(CC) -E interrupts_msp432p401r_gcc.c $(CFLAGS) -o interrupts_msp432p401r_gcc.i
-
-# startup_msp432p401r_gcc.i: startup_msp432p401r_gcc.c
-# 	$(CC) -E startup_msp432p401r_gcc.c $(CFLAGS) -o startup_msp432p401r_gcc.i
-
-# system_msp432p401r.i: system_msp432p401r.c
-# 	$(CC) -E system_msp432p401r.c $(CFLAGS) -o system_msp432p401r.i
-
-#######################################################################
-
-#######################################################################
-
-# main.asm: main.c
-# 	$(CC) -c $(CFLAGS) main.c -o main.o
-# 	$(OBJCMD) -Sx main.o > main.asm 
-
-# memory.asm: memory.c
-# 	$(CC) -c $(CFLAGS) memory.c -o memory.o
-# 	$(OBJCMD) -Sx memory.o > memory.asm 
-
-# interrupts_msp432p401r_gcc.asm: interrupts_msp432p401r_gcc.c
-# 	$(CC) -c  $(CFLAGS) interrupts_msp432p401r_gcc.c -o interrupts_msp432p401r_gcc.o
-# 	$(OBJCMD) -Sx interrupts_msp432p401r_gcc.o > interrupts_msp432p401r_gcc.asm 
-
-# startup_msp432p401r_gcc.asm: startup_msp432p401r_gcc.c
-# 	$(CC) -c $(CFLAGS) startup_msp432p401r_gcc.c -o startup_msp432p401r_gcc.i
-# 	$(OBJCMD) -Sx startup_msp432p401r_gcc.o > startup_msp432p401r_gcc.asm 
-
-# system_msp432p401r.asm: system_msp432p401r.c
-# 	$(CC) -c $(CFLAGS) system_msp432p401r.c -o system_msp432p401r.o
-# 	$(OBJCMD) -Sx system_msp432p401r.o > system_msp432p401r.asm 
-
-# c1m2.asm: c1m2.out
-# 	$(OBJCMD) -Sx c1m2.out > c1m2.asm 
-
-
-#######################################################################
-
-#######################################################################
-
-# main.o: main.c
-# 	$(CC) -c main.c $(CFLAGS) -o main.o
-
-# memory.o: memory.c
-# 	$(CC) -c memory.c $(BASEFLAGS) -DHOST -I$(INCLUDES) -o memory.o
-
-# interrupts_msp432p401r_gcc.o: interrupts_msp432p401r_gcc.c
-# 	arm-none-eabi-gcc -c interrupts_msp432p401r_gcc.c \
-# 	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
-# 	-march=$(ARCH) --specs=$(SPECS) \
-# 	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-# 	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
-# 	 $(CMSIS_INCLUDE) -o interrupts_msp432p401r_gcc.o
-
-# startup_msp432p401r_gcc.o: startup_msp432p401r_gcc.c
-# 	arm-none-eabi-gcc -c startup_msp432p401r_gcc.c \
-# 	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
-# 	-march=$(ARCH) --specs=$(SPECS) \
-# 	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-# 	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
-# 	 $(CMSIS_INCLUDE) -o startup_msp432p401r_gcc.o
-
-# system_msp432p401r.o: system_msp432p401r.c
-# 	arm-none-eabi-gcc -c system_msp432p401r.c \
-# 	$(BASEFLAGS) -DMSP432 -mcpu=$(CPU) \
-# 	-march=$(ARCH) --specs=$(SPECS) \
-# 	-mfpu=fpv4-sp-d16 -mfloat-abi=hard \
-# 	-mthumb -I$(INCLUDES) $(MSP432_INCLUDE)\
-# 	 $(CMSIS_INCLUDE) -o system_msp432p401r.o
-
-#######################################################################
-
-######################################################################
 
 .PHONY: compile-all
 compile-all: main.o memory.o system_msp432p401r.o startup_msp432p401r_gcc.o interrupts_msp432p401r_gcc.o
